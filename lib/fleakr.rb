@@ -210,13 +210,21 @@ module Fleakr
     places = (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
     places
   end
-  
+
   # Find places by searching within a bounding box
   def self.find_place_by_lat_lon(latitude,longitude,accuracy=16)
     response = Fleakr::Api::MethodRequest.with_response!('places.findByLatLon', 
     :accuracy => accuracy, :lon => longitude, :lat => latitude)
     (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
   end
+
+  # Find places by searching within a bounding box
+  def self.find_photos_by_lat_lon(latitude,longitude,accuracy=1)
+    response = Fleakr::Api::MethodRequest.with_response!('photos.geo.photosForLocation', 
+    :accuracy => accuracy, :lon => longitude, :lat => latitude)
+    (response.body/'rsp/photos/photo').map {|e| Fleakr::Objects::Photo.new(e) }
+  end
+
 end
 
 # Alias Fleakr methods as Flickr if possible
