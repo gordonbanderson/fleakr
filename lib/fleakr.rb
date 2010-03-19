@@ -201,7 +201,15 @@ module Fleakr
   def self.resource_from_url(url)
     Fleakr::Objects::Url.new(url).resource
   end
+  
+  #Geo related methods
 
+  #
+  def self.find_places(query)
+    response = Fleakr::Api::MethodRequest.with_response!('places.find', :query => query)
+    places = (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
+    places
+  end
 end
 
 # Alias Fleakr methods as Flickr if possible
