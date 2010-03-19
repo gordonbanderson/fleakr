@@ -24,10 +24,31 @@ module Fleakr
       
       include Fleakr::Support::Object
       
+      #If a place comes from a text search then it will have less information than the getInfo method.  use this flag so
+      #as to know when to lazily called getInfo
+      @brief = true
+      
       flickr_attribute :longitude, :latitude, :woeid
       flickr_attribute :place_type_id, :place_type, :timezone, :place_url
-      flickr_attribute :name, :from => '.'
-
+      flickr_attribute :name, :from => ['name']
+      
+      #Find by woe id
+      find_one :by_woe_id, :using => :woe_id, :call => 'places.getInfo', :path => 'rsp/place'
+      
+      def initialize(document = nil, options = {})
+        puts "IN PLACE OVERRIDE METHOD"
+        self.populate_from(document) unless document.nil?
+        @authentication_options = options.extract!(:auth_token)
+        
+        if @name.blank?
+          puts "BLANK NAME :( *********"
+          @name = document.at('.').inner_text
+        else
+          @brief = false
+        end
+        
+        puts "BRIEF:#{@brief}"
+      end
     end
     
   end
