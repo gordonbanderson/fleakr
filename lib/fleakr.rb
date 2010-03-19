@@ -204,7 +204,7 @@ module Fleakr
   
   #Geo related methods
 
-  #
+  # Find places by searching with a query string, e.g. 'Taranaki Street, Wellington'
   def self.find_places(query)
     response = Fleakr::Api::MethodRequest.with_response!('places.find', :query => query)
     places = (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
