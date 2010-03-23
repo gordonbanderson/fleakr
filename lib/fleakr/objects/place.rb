@@ -35,6 +35,10 @@ module Fleakr
       #Find by woe id
       find_one :by_woe_id, :using => :woe_id, :call => 'places.getInfo', :path => 'rsp/place'
       
+      #Find by a search query
+      find_all :by_query, :call => 'places.find', :path => 'places/place'
+
+      
       def initialize(document = nil, options = {})
         puts "IN PLACE OVERRIDE METHOD"
         self.populate_from(document) unless document.nil?
