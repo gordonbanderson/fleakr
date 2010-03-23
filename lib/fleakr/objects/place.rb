@@ -44,6 +44,16 @@ module Fleakr
       #Find places that are the children of a given place and have public photographs
       find_all :children_with_public_photos, :using => :woe_id, :call=> 'places.getChildrenWithPhotosPublic',:path => 'places/place'
       
+      
+      # A list of related tags.  Each of the objects in the collection is an instance of Tag
+      #
+      def tags
+        @tags ||= begin
+          Tag.find_all_by_woe_id(@woeid)
+        end
+      end
+      
+      #Overcome issue with name being an attribute or a text node depending on call used
       def initialize(document = nil, options = {})
         puts "IN PLACE OVERRIDE METHOD"
         self.populate_from(document) unless document.nil?
