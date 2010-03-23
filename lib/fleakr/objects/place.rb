@@ -30,6 +30,7 @@ module Fleakr
       
       flickr_attribute :longitude, :latitude, :woeid
       flickr_attribute :place_type_id, :place_type, :timezone, :place_url
+      flickr_attribute :photo_count # Only happens with places.placesForTags call
       flickr_attribute :name, :from => ['name']
       
       #Find by woe id
@@ -45,6 +46,19 @@ module Fleakr
       find_all :children_with_public_photos, :using => :woe_id, :call=> 'places.getChildrenWithPhotosPublic',:path => 'places/place'
       
       
+      
+      def self.find_all_by_tags(tags, place_type_id, woe_id = nil)
+        puts "WOE ID:#{woe_id}"
+        if woe_id.blank?
+          response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :tags => tags, :place_type_id => place_type_id)
+        else
+          response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :woe_id => woe_id, :tags => tags, :place_type_id => place_type_id)
+        end
+        (response.body/'places/place').map {|e| Place.new(e) }
+      end
+
+
+
       # A list of related tags.  Each of the objects in the collection is an instance of Tag
       #
       def tags
