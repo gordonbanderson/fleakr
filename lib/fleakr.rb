@@ -221,7 +221,7 @@ module Fleakr
   end
 
   # Find places by searching within a bounding box
-  def self.find_photos_by_lat_lon(latitude,longitude,accuracy=1)
+  def self.find_photos_by_lat_lon(longitude,latitude,accuracy=1)
     response = Fleakr::Api::MethodRequest.with_response!('photos.geo.photosForLocation', 
     :accuracy => accuracy, :lon => longitude, :lat => latitude)
     (response.body/'rsp/photos/photo').map {|e| Fleakr::Objects::Photo.new(e) }
