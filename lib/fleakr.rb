@@ -201,31 +201,6 @@ module Fleakr
   def self.resource_from_url(url)
     Fleakr::Objects::Url.new(url).resource
   end
-  
-  #Geo related methods
-
-  # Find places by searching within a bounding box
-  def self.find_places_by_lat_lon(longitude,latitude,accuracy=16)
-    response = Fleakr::Api::MethodRequest.with_response!('places.findByLatLon', 
-    :accuracy => accuracy, :lon => longitude, :lat => latitude)
-    (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
-  end
-  
-  
-  # Find places by searching within a bounding box
-  def self.find_places_by_bounding_box(min_longitude, min_latitude, max_longitude, max_latitude,place_type_id=8)
-    bbox_string = "#{min_longitude},#{min_latitude},#{max_longitude},#{max_latitude}"
-    response = Fleakr::Api::MethodRequest.with_response!('places.placesForBoundingBox', 
-    :place_type_id => place_type_id, :bbox=>bbox_string)
-    (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
-  end
-
-  # Find places by searching within a bounding box
-  def self.find_photos_by_lat_lon(longitude,latitude,accuracy=1)
-    response = Fleakr::Api::MethodRequest.with_response!('photos.geo.photosForLocation', 
-    :accuracy => accuracy, :lon => longitude, :lat => latitude)
-    (response.body/'rsp/photos/photo').map {|e| Fleakr::Objects::Photo.new(e) }
-  end
 
 end
 
