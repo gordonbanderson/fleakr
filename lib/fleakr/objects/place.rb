@@ -122,6 +122,17 @@ module Fleakr
         end
         (response.body/'places/place').map {|e| Place.new(e) }
       end
+      
+      
+      #Return top geotagged places for the previous day
+      def self.find_top_places(place_type_id = 8, woe_id = nil)
+        if woe_id.blank?
+          response = Fleakr::Api::MethodRequest.with_response!('places.getTopPlacesList', :place_type_id => place_type_id)
+        else
+          response = Fleakr::Api::MethodRequest.with_response!('places.getTopPlacesList', :woe_id => woe_id, :place_type_id => place_type_id)
+        end
+        (response.body/'places/place').map {|e| Place.new(e) }
+      end
 
 
 
