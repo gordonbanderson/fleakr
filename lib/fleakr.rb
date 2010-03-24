@@ -205,7 +205,7 @@ module Fleakr
   #Geo related methods
 
   # Find places by searching within a bounding box
-  def self.find_places_by_lat_lon(latitude,longitude,accuracy=16)
+  def self.find_places_by_lat_lon(longitude,latitude,accuracy=16)
     response = Fleakr::Api::MethodRequest.with_response!('places.findByLatLon', 
     :accuracy => accuracy, :lon => longitude, :lat => latitude)
     (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
