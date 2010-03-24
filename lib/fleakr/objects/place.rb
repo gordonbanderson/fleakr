@@ -53,7 +53,17 @@ module Fleakr
       
       #Find places that are the children of a given place and have public photographs
       find_all :children_with_public_photos, :using => :woe_id, :call=> 'places.getChildrenWithPhotosPublic',:path => 'places/place'
-     
+      
+      
+      # Use the flickr search API to find all photos associated with this place
+      def photos
+        photos = Fleakr::Objects::Photo.find_all_by_search(:woe_id => woeid)
+      end
+      
+      #Use the flickr search API to find all photos with a radius of the centre point of the place
+      def photos_within_radius(radius_km)
+        Fleakr::Objects::Photo.find_all_by_search(:latitude => @latitude, :longitude => @longitude, :radius => radius_km)
+      end
       
       def load_info # :nodoc:
         response = Fleakr::Api::MethodRequest.with_response!('places.getInfo', :woe_id => self.woeid)
@@ -132,6 +142,22 @@ module Fleakr
           response = Fleakr::Api::MethodRequest.with_response!('places.getTopPlacesList', :woe_id => woe_id, :place_type_id => place_type_id)
         end
         (response.body/'places/place').map {|e| Place.new(e) }
+      end
+
+      # Find places by searching within a bounding box
+      def self.find_places_by_lat_lon(longitude,latitude,accuracy=16)
+        response = Fleakr::Api::MethodRequest.with_response!('places.findByLatLon', 
+        :accuracy => accuracy, :lon => longitude, :lat => latitude)
+        (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
+      end
+
+
+      # Find places by searching within a bounding box
+      def self.find_places_by_bounding_box(min_longitude, min_latitude, max_longitude, max_latitude,place_type_id=8)
+        bbox_string = "#{min_longitude},#{min_latitude},#{max_longitude},#{max_latitude}"
+        response = Fleakr::Api::MethodRequest.with_response!('places.placesForBoundingBox', 
+        :place_type_id => place_type_id, :bbox=>bbox_string)
+        (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
       end
 
 
