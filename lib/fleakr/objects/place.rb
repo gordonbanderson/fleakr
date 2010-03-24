@@ -51,9 +51,6 @@ module Fleakr
       #Find by a search query
       find_all :by_query, :call => 'places.find', :path => 'places/place'
       
-      #By user (note this also has several options available TO DO)
-      find_all :by_authenticated_user, :call => 'places.placesForUser', :path => 'places/place'
-
       #Find places that are the children of a given place and have public photographs
       find_all :children_with_public_photos, :using => :woe_id, :call=> 'places.getChildrenWithPhotosPublic',:path => 'places/place'
      
@@ -107,10 +104,21 @@ module Fleakr
       
       #This returns places for the currently authenticated user
       def self.find_all_by_authenticated_user(place_type_id = 8, woe_id = nil)
+        puts "FIND ALL BY AUTH"
         if woe_id.blank?
           response = Fleakr::Api::MethodRequest.with_response!('places.placesForUser', :place_type_id => place_type_id)
         else
           response = Fleakr::Api::MethodRequest.with_response!('places.placesForUser', :woe_id => woe_id, :place_type_id => place_type_id)
+        end
+        (response.body/'places/place').map {|e| Place.new(e) }
+      end
+      
+      #This returns places for the contacts of the currently authenticated user
+      def self.find_all_by_contacts_of_authenticated_user(place_type_id = 8, woe_id = nil)
+        if woe_id.blank?
+          response = Fleakr::Api::MethodRequest.with_response!('places.placesForContacts', :place_type_id => place_type_id)
+        else
+          response = Fleakr::Api::MethodRequest.with_response!('places.placesForContacts', :woe_id => woe_id, :place_type_id => place_type_id)
         end
         (response.body/'places/place').map {|e| Place.new(e) }
       end
