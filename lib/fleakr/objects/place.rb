@@ -50,6 +50,9 @@ module Fleakr
       
       #Find by a search query
       find_all :by_query, :call => 'places.find', :path => 'places/place'
+      
+      #By user (note this also has several options available TO DO)
+      find_all :by_authenticated_user, :call => 'places.placesForUser', :path => 'places/place'
 
       #Find places that are the children of a given place and have public photographs
       find_all :children_with_public_photos, :using => :woe_id, :call=> 'places.getChildrenWithPhotosPublic',:path => 'places/place'
