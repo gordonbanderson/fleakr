@@ -49,7 +49,6 @@ module Fleakr
       
       
       def self.find_all_by_woe_id(woe_id)
-        puts "WOE ID:#{woe_id}"
         response = Fleakr::Api::MethodRequest.with_response!('places.tagsForPlace', :woe_id => woe_id)
         (response.body/'tags/tag').map {|e| Tag.new(e) }
       end

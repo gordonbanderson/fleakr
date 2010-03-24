@@ -15,3 +15,4 @@ require 'fleakr/objects/url'
 
 #geo related items
 require 'fleakr/objects/place'
+require 'fleakr/objects/place_type'
