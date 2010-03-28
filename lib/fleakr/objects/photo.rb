@@ -85,6 +85,12 @@ module Fleakr
         Photo.find_by_id(photo.id)
       end
 
+
+      def set_tags(tags)
+        options = {:tags => tags, :photo_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.setTags', options)
+      end
+
       # Replace the current photo's image with the one specified by filename.  This 
       # call requires authentication.
       #
