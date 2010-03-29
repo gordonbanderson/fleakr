@@ -90,6 +90,7 @@ module Fleakr
       def set_tags(tags)
         options = {:tags => tags, :photo_id => id}
         response = Fleakr::Api::WriteMethodRequest.with_response!('photos.setTags', options)
+        @tags = nil #Force a refresh against the flickr API next time <photo>.tags is called
       end
       
       # Set title and description for a photograph
@@ -98,6 +99,8 @@ module Fleakr
       def set_title_and_description(title, description)
         options = {:title => title, :description => description, :photo_id => id}
         response = Fleakr::Api::WriteMethodRequest.with_response!('photos.setMeta', options)
+        @title = title
+        @description = description
       end
 
       # Replace the current photo's image with the one specified by filename.  This 
