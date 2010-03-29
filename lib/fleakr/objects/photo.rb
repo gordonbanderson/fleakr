@@ -85,6 +85,61 @@ module Fleakr
         Photo.find_by_id(photo.id)
       end
 
+      # Set tags for a photograph
+      # [:tags] A comma separated list of tags, a tag being a string
+      def set_tags(tags)
+        options = {:tags => tags, :photo_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.setTags', options)
+        @tags = nil #Force a refresh against the flickr API next time <photo>.tags is called
+      end
+      
+      # Add tags for a photograph
+      # [:additional_tags] A comma separated list of tags, a tag being a string
+      def add_tags(additional_tags)
+        options = {:tags => additional_tags, :photo_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.addTags', options)
+        @tags = nil #Force a refresh against the flickr API next time <photo>.tags is called
+      end
+      
+      # Set title and description for a photograph
+      # [:title] The new title
+      # [:description] The new description
+      def set_title_and_description(title, description)
+        options = {:title => title, :description => description, :photo_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.setMeta', options)
+        @title = title
+        @description = description
+      end
+      
+      
+      # Set the location of a photograph
+      # [:longitude] The new longitude
+      # [:latitude] The new latitude
+      # [:accuracy] The new accuracy
+      def set_location(longitude, latitude, accuracy)
+        options = {:lat => latitude, :lon => longitude, :accuracy => accuracy, :photo_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.geo.setLocation', options)
+      end
+      
+      
+      # Rotate the image by a specified number of degrees
+      # [:degrees] The amount of rotation clockwise - valid values are 90,180,270
+      def rotate(degrees)
+        options = {:degrees=>degrees, :photo_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.transform.rotate', options)
+      end
+      
+      # Set the time of a photograph
+      # [:date_taken] The date a photograph was taken
+      # [:dated_posted] The date a photograph was posted (defaults to nil, ie not used)
+      # [:date_granularity] The graunlarity of the time, see http://www.flickr.com/services/api/flickr.photos.setDates.html for more info
+      def set_date(date_taken, date_posted = nil, date_granularity = nil)
+        options = {:photo_id => id, :date_taken => date_taken}
+        options[:date_posted]=date_posted if date_posted != nil
+        options[:date_granularity]=date_granularity if date_granularity != nil
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.setDates', options)
+      end
+
       # Replace the current photo's image with the one specified by filename.  This 
       # call requires authentication.
       #
