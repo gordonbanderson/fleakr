@@ -122,6 +122,13 @@ module Fleakr
       end
       
       
+      # Rotate the image by a specified number of degrees
+      # [:degrees] The amount of rotation clockwise - valid values are 90,180,270
+      def rotate(degrees)
+        options = {:degrees=>degrees, :photo_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.transform.rotate', options)
+      end
+      
       # Set the time of a photograph
       # [:date_taken] The date a photograph was taken
       # [:dated_posted] The date a photograph was posted (defaults to nil, ie not used)
