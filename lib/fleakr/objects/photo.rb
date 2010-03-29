@@ -85,10 +85,19 @@ module Fleakr
         Photo.find_by_id(photo.id)
       end
 
-
+      # Set tags for a photograph
+      # [:tags] A comma separated list of tags, a tag being a string
       def set_tags(tags)
         options = {:tags => tags, :photo_id => id}
         response = Fleakr::Api::WriteMethodRequest.with_response!('photos.setTags', options)
+      end
+      
+      # Set title and description for a photograph
+      # [:title] The new title
+      # [:description] The new description
+      def set_title_and_description(title, description)
+        options = {:title => title, :description => description, :photo_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.setMeta', options)
       end
 
       # Replace the current photo's image with the one specified by filename.  This 
