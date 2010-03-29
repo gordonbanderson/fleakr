@@ -18,6 +18,7 @@ module Fleakr
       flickr_attribute :id, :raw
       flickr_attribute :author_id, :from => '@author'
       flickr_attribute :value, :from => '.' # pull this from the current node
+      flickr_attribute :count, :from => '@count' # Used with place.tags
       flickr_attribute :machine_flag, :from => '@machine_tag'
       
       find_all :by_photo_id, :call => 'tags.getListPhoto', :path => 'photo/tags/tag'
@@ -36,6 +37,20 @@ module Fleakr
           response = Fleakr::Api::MethodRequest.with_response!('tags.getRelated', :tag => value)
           (response.body/'rsp/tags/tag').map {|e| Tag.new(e) }
         end
+      end
+      
+      # A list of related tags.  Each of the objects in the collection is an instance of Tag
+      #
+      def places
+        @places ||= begin
+          Place.find_all_by_tags(@value, @woe_id)
+        end
+      end
+      
+      
+      def self.find_all_by_woe_id(woe_id)
+        response = Fleakr::Api::MethodRequest.with_response!('places.tagsForPlace', :woe_id => woe_id)
+        (response.body/'tags/tag').map {|e| Tag.new(e) }
       end
       
       # Is this a machine tag?

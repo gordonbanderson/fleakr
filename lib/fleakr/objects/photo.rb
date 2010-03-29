@@ -185,6 +185,33 @@ module Fleakr
       def updated_at
         Time.at(updated.to_i)
       end
+      
+      
+      #Search API, see http://www.flickr.com/services/api/flickr.photos.search.html
+      def self.find_all_by_search(*options)
+        options[0][:extras]= 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o'
+        response = Fleakr::Api::MethodRequest.with_response!('photos.search', options[0])
+        (response.body/'rsp/photos/photo').map {|e| Fleakr::Objects::Photo.new(e) }
+        
+        
+      end
+
+=begin
+ <photo id="3912928259" owner="10162444@N06" secret="fa93ce6f68" server="3490" farm="4" title="Creels, Arbroath Harbour" 
+ ispublic="1" isfriend="0" isfamily="0" license="0" dateupload="1252790891" datetaken="2009-09-09 17:58:05" 
+ datetakengranularity="0" ownername="Sithy Lookster Images" iconserver="2646" iconfarm="3" lastupdate="1253103330"
+  latitude="56.556171" longitude="-2.583718" accuracy="14" place_id="F_oH.WaYAZUj8Q" woeid="10906" 
+  tags="ocean sea coast scotland boat marine harbour angus lobster arbroath lobsterpot creel" machine_tags="" 
+  views="0" media="photo" media_status="ready" pathalias="cthodgson" 
+  url_sq="http://farm4.static.flickr.com/3490/3912928259_fa93ce6f68_s.jpg" height_sq="75" width_sq="75" url_t="http://farm4.static.flickr.com/3490/3912928259_fa93ce6f68_t.jpg" height_t="59" width_t="100" url_s="http://farm4.static.flickr.com/3490/3912928259_fa93ce6f68_m.jpg" height_s="142" width_s="240" url_m="http://farm4.static.flickr.com/3490/3912928259_fa93ce6f68.jpg" height_m="295" width_m="500">
+=end      
+      # Find places by searching at a given point
+      # This API method does not seem to work well though - see http://www.flickr.com/groups/api/discuss/72157623128951191/
+      def self.find_by_lat_lon(longitude,latitude,accuracy=1)
+        response = Fleakr::Api::MethodRequest.with_response!('photos.geo.photosForLocation', 
+        :accuracy => accuracy, :lon => longitude, :lat => latitude)
+        (response.body/'rsp/photos/photo').map {|e| Fleakr::Objects::Photo.new(e) }
+      end
 
       # Create methods to access image sizes by name
       SIZES.each do |size|

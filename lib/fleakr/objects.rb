@@ -13,3 +13,7 @@ require 'fleakr/objects/search'
 require 'fleakr/objects/set'
 require 'fleakr/objects/user'
 require 'fleakr/objects/url'
+
+#geo related items
+require 'fleakr/objects/place'
+require 'fleakr/objects/place_type'
