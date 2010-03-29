@@ -93,6 +93,14 @@ module Fleakr
         @tags = nil #Force a refresh against the flickr API next time <photo>.tags is called
       end
       
+      # Add tags for a photograph
+      # [:additional_tags] A comma separated list of tags, a tag being a string
+      def add_tags(additional_tags)
+        options = {:tags => additional_tags, :photo_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.addTags', options)
+        @tags = nil #Force a refresh against the flickr API next time <photo>.tags is called
+      end
+      
       # Set title and description for a photograph
       # [:title] The new title
       # [:description] The new description
@@ -101,6 +109,16 @@ module Fleakr
         response = Fleakr::Api::WriteMethodRequest.with_response!('photos.setMeta', options)
         @title = title
         @description = description
+      end
+      
+      
+      # Set the location of a photograph
+      # [:longitude] The new longitude
+      # [:latitude] The new latitude
+      # [:accuracy] The new accuracy
+      def set_location(longitude, latitude, accuracy)
+        options = {:lat => latitude, :lon => longitude, :accuracy => accuracy, :photo_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.geo.setLocation', options)
       end
 
       # Replace the current photo's image with the one specified by filename.  This 
