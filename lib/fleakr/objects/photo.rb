@@ -120,6 +120,18 @@ module Fleakr
         options = {:lat => latitude, :lon => longitude, :accuracy => accuracy, :photo_id => id}
         response = Fleakr::Api::WriteMethodRequest.with_response!('photos.geo.setLocation', options)
       end
+      
+      
+      # Set the time of a photograph
+      # [:date_taken] The date a photograph was taken
+      # [:dated_posted] The date a photograph was posted (defaults to nil, ie not used)
+      # [:date_granularity] The graunlarity of the time, see http://www.flickr.com/services/api/flickr.photos.setDates.html for more info
+      def set_date(date_taken, date_posted = nil, date_granularity = nil)
+        options = {:photo_id => id, :date_taken => date_taken}
+        options[:date_posted]=date_posted if date_posted != nil
+        options[:date_granularity]=date_granularity if date_granularity != nil
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photos.setDates', options)
+      end
 
       # Replace the current photo's image with the one specified by filename.  This 
       # call requires authentication.
