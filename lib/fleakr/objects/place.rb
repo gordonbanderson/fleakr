@@ -145,10 +145,15 @@ module Fleakr
       end
 
       # Find places by searching within a bounding box
-      def self.find_places_by_lat_lon(longitude,latitude,accuracy=16)
+      #FIXME - this should return only one
+      def self.find_by_lat_lon(options)
+        options[:accuracy] = 16 if options[:accuracy] == nil
+        
         response = Fleakr::Api::MethodRequest.with_response!('places.findByLatLon', 
-        :accuracy => accuracy, :lon => longitude, :lat => latitude)
-        (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
+        :accuracy => options[:accuracy], :lon => options[:lon], :lat => options[:lat])
+        
+        #There should only be one result, so only return first
+        (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) } [0]
       end
 
 
