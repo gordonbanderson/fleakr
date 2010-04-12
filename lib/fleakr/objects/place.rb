@@ -28,10 +28,11 @@ module Fleakr
       #as to know when to lazily called getInfo
       @brief = true
       
-      flickr_attribute :longitude, :latitude, :woeid, :place_id
+      flickr_attribute :longitude, :latitude, :place_id
       flickr_attribute :place_type_id, :place_type, :timezone, :place_url
       flickr_attribute :photo_count # Only happens with places.placesForTags call
       flickr_attribute :name, :from => ['name']
+      flickr_attribute :woe_id, :from => ['woeid']
       
       #From the full version of a place
       flickr_attribute :timezone, :has_shapedata
