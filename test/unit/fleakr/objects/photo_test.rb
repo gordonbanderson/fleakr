@@ -239,17 +239,6 @@ module Fleakr::Objects
           2.times { photo.owner }
         end
         
-        should "be able to retrieve EXIF data" do
-          photo = Photo.new
-          photo.stubs(:id).with().returns('4507120023')
-          
-          response = mock_request_cycle :for => 'photos.getExif', :with => {:photo_id => id}
-          
-          photo.expects(:context).with().returns(context)
-
-          photo.previous.should == previous_photo
-        end
-        
       end
     end
 
