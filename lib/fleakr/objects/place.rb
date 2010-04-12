@@ -177,15 +177,16 @@ module Fleakr
       
       #Overcome issue with name being an attribute or a text node depending on call used
       def initialize(document = nil, options = {})
-        self.populate_from(document) unless document.nil?
-        @authentication_options = options.extract!(:auth_token)
+        if document != nil
+          self.populate_from(document) unless document.nil?
+          if @name.blank?
+            @name = document.at('.').inner_text
+          else
+            @brief = false
+          end
         
-        if @name.blank?
-          @name = document.at('.').inner_text
-        else
-          @brief = false
         end
-        
+        @authentication_options = options.extract!(:auth_token)
       end
     end
     
