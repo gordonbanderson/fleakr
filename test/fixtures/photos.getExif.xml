@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <rsp stat="ok">
-<photo id="4507120023" secret="37efb9102f" server="2683" farm="3">
+<photo id="1" secret="37efb9102f" server="2683" farm="3">
 	<exif tagspace="System" tagspaceid="0" tag="FileName" label="FileName">
 		<raw>ORI9141194487814365231.img</raw>
 	</exif>
