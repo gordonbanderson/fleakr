@@ -2,24 +2,29 @@ require File.dirname(__FILE__) + '/../../../test_helper'
 
 module Fleakr::Objects
   class PlaceTest < Test::Unit::TestCase
+    
+    should_autoload_when_accessing :shapefile_url,:has_shapedata, :locality, :country, :region, :county, :with => :load_info
 
     context "The Place class" do
-      #should_find_all :places, :by => :query, :call => 'places.find', :path => 'rsp/place'
+      should_find_all :places, :by => :query, :call => 'places.find', :path => 'rsp/places/place'
       
       
       should_find_one :place, :by => :woe_id, :call => 'places.getInfo', :path => 'rsp/place'
       should_find_one :place, :by => :url, :call => 'places.getInfoByUrl', :path => 'rsp/place'
+      
+      #should_find_all :places, :by => :tags, :with => {:place_type_id => 8}, :call => 'places.placesForTags', :path => 'rsp/places/place'
     end
     
     
     
     context "An instance of the Place class" do
+      setup do
+        @place = Place::new        
+      end
       
-      setup { @place = Place.new }
-      
-      context "when populating from the places_getInfo XML data" do
+      context "when populating from the places_find XML data" do
         setup do
-          @object = Place.new(Hpricot.XML(read_fixture('places.getInfo')).at('rsp/place'))
+          @object = Place.new(Hpricot.XML(read_fixture('places.find')).at('rsp/places/place'))
         end
         
         should_have_a_value_for :latitude   => '50.782'
@@ -33,7 +38,10 @@ module Fleakr::Objects
         should_have_a_value_for :name  => 'Eastbourne, England, United Kingdom'
         
       end
+      
+      
+      
     end
-
   end
+
 end
