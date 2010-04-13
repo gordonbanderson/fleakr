@@ -35,11 +35,12 @@ module Fleakr
       flickr_attribute :woe_id, :from => ['woeid']
       
       #From the full version of a place
+      flickr_attribute :county, :country, :locality, :region
       flickr_attribute :timezone, :has_shapedata
       flickr_attribute :shapefile_url, :from => 'place/shapedata/urls/shapefile'
       
   
-      lazily_load :timezone, :has_shapedata, :shapefile_url, :with => :load_info
+      lazily_load :has_shapedata, :shapefile_url, :county, :country, :locality, :region, :with => :load_info
       
       scoped_search
 
@@ -84,23 +85,7 @@ module Fleakr
         @country = Place.new(country_node) if country_node.to_s.strip != ''
         
       end
-      
-      
-      def locality
-        @locality
-      end
-      
-      def region
-        @region
-      end
-      
-      def country
-        @country
-      end
-      
-      def county
-        @county
-      end
+ 
       
       
       def self.find_all_by_tags(tags, options={})
