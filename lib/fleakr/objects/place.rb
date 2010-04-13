@@ -67,7 +67,7 @@ module Fleakr
       end
       
       def load_info # :nodoc:
-        response = Fleakr::Api::MethodRequest.with_response!('places.getInfo', :woe_id => self.woeid)
+        response = Fleakr::Api::MethodRequest.with_response!('places.getInfo', :woe_id => self.woe_id)
         self.populate_from(response.body)
         
         #Grab the other items related to this, ie country, locality etc
@@ -103,7 +103,14 @@ module Fleakr
       end
       
       
-      def self.find_all_by_tags(tags, place_type_id, woe_id = nil)
+      def self.find_all_by_tags(tags, options={})
+        #options[:place_type_id] = 8 if options[:place_type_id] == nil
+        place_type_id = 8
+        place_type_id = options[:place_type_id] if options[:place_type_id] != nil
+        woe_id = options[:woe_id]
+        
+        
+        
         if woe_id.blank?
           response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :tags => tags, :place_type_id => place_type_id)
         else
