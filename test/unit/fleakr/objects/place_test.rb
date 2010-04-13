@@ -19,7 +19,8 @@ module Fleakr::Objects
     
     context "An instance of the Place class" do
       setup do
-        @place = Place::new        
+        @place = Place::new
+        @place.woe_id = 19135
       end
       
       context "when populating from the places_find XML data" do
@@ -39,9 +40,21 @@ module Fleakr::Objects
         
       end
       
-      
-      
+      should "have tags" do
+        response = mock_request_cycle :for => 'places.tagsForPlace', :with => {:woe_id => 19135}
+        stubs = []
+        elements = (response.body/'rsp/tags/tag').map
+        elements.each do |element|
+          stub = stub()
+          stubs << stub
+          Tag.expects(:new).with(element).returns(stub)
+        end
+        @place.tags.should == stubs
+      end
     end
+    
+    
+    
   end
 
 end
