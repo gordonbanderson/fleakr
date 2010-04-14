@@ -155,8 +155,15 @@ module Fleakr
 
 
       # Find places by searching within a bounding box
-      def self.find_places_by_bounding_box(min_longitude, min_latitude, max_longitude, max_latitude,place_type_id=8)
-        bbox_string = "#{min_longitude},#{min_latitude},#{max_longitude},#{max_latitude}"
+      # options[:west] - longitude of the west side of the bounding box
+      # options[:east] - longitude of the east side of the bounding box
+      # options[:north] - latitude of the north side of the bounding box
+      # options[:south] - latitude of the south side of the bounding box
+      def self.find_all_by_bounding_box(options)
+        #min_longitude, min_latitude, max_longitude, max_latitude,place_type_id=8
+        place_type_id = (options[:place_type_id]==nil) ? 8 : options[:place_type_id]
+        
+        bbox_string = "#{options[:west]},#{options[:south]},#{options[:east]},#{options[:north]}"
         response = Fleakr::Api::MethodRequest.with_response!('places.placesForBoundingBox', 
         :place_type_id => place_type_id, :bbox=>bbox_string)
         (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
