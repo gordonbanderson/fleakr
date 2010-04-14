@@ -7,10 +7,14 @@ module Fleakr::Objects
 
     context "The Place class" do
       should_find_all :places, :by => :query, :call => 'places.find', :path => 'rsp/places/place'
+      should_find_all :places,  :using => :woe_id, :method_name => 'children_with_photos_public',
+          :call => 'places.getChildrenWithPhotosPublic', :path => 'rsp/places/place'
+      
       
       
       should_find_one :place, :by => :woe_id, :call => 'places.getInfo', :path => 'rsp/place'
       should_find_one :place, :by => :url, :call => 'places.getInfoByUrl', :path => 'rsp/place'
+      
       
       #should_find_all :places, :by => :tags, :with => {:place_type_id => 8}, :call => 'places.placesForTags', :path => 'rsp/places/place'
     end
