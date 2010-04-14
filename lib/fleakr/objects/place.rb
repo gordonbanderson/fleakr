@@ -28,17 +28,19 @@ module Fleakr
       #as to know when to lazily called getInfo
       @brief = true
       
-      flickr_attribute :longitude, :latitude, :woeid, :place_id
+      flickr_attribute :longitude, :latitude, :place_id
       flickr_attribute :place_type_id, :place_type, :timezone, :place_url
       flickr_attribute :photo_count # Only happens with places.placesForTags call
       flickr_attribute :name, :from => ['name']
+      flickr_attribute :woe_id, :from => ['woeid']
       
       #From the full version of a place
+      flickr_attribute :county, :country, :locality, :region
       flickr_attribute :timezone, :has_shapedata
       flickr_attribute :shapefile_url, :from => 'place/shapedata/urls/shapefile'
       
   
-      lazily_load :timezone, :has_shapedata, :shapefile_url, :with => :load_info
+      lazily_load :has_shapedata, :shapefile_url, :county, :country, :locality, :region, :with => :load_info
       
       scoped_search
 
@@ -52,7 +54,7 @@ module Fleakr
       find_all :by_query, :call => 'places.find', :path => 'places/place'
       
       #Find places that are the children of a given place and have public photographs
-      find_all :children_with_public_photos, :using => :woe_id, :call=> 'places.getChildrenWithPhotosPublic',:path => 'places/place'
+      find_all :children_with_photos_public, :using => :woe_id, :call=> 'places.getChildrenWithPhotosPublic',:path => 'places/place'
       
       
       # Use the flickr search API to find all photos associated with this place
@@ -66,7 +68,7 @@ module Fleakr
       end
       
       def load_info # :nodoc:
-        response = Fleakr::Api::MethodRequest.with_response!('places.getInfo', :woe_id => self.woeid)
+        response = Fleakr::Api::MethodRequest.with_response!('places.getInfo', :woe_id => self.woe_id)
         self.populate_from(response.body)
         
         #Grab the other items related to this, ie country, locality etc
@@ -83,26 +85,17 @@ module Fleakr
         @country = Place.new(country_node) if country_node.to_s.strip != ''
         
       end
+ 
       
       
-      def locality
-        @locality
-      end
-      
-      def region
-        @region
-      end
-      
-      def country
-        @country
-      end
-      
-      def county
-        @county
-      end
-      
-      
-      def self.find_all_by_tags(tags, place_type_id, woe_id = nil)
+      def self.find_all_by_tags(tags, options={})
+        #options[:place_type_id] = 8 if options[:place_type_id] == nil
+        place_type_id = 8
+        place_type_id = options[:place_type_id] if options[:place_type_id] != nil
+        woe_id = options[:woe_id]
+        
+        
+        
         if woe_id.blank?
           response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :tags => tags, :place_type_id => place_type_id)
         else
@@ -134,8 +127,12 @@ module Fleakr
       end
       
       
-      #Return top geotagged places for the previous day
-      def self.find_top_places(place_type_id = 8, woe_id = nil)
+      #Return top geotagged places for the previous day by default
+      # options[:place_type_id] - the place type id being searched for
+      # options[:woe_id] - the parent woe id, if you are looking for top places in e.g. New Zealand
+      def self.find_all_top_places(options={})
+        woe_id = options[:woe_id]
+        place_type_id = (options[:place_type_id]==nil) ? 8 : options[:place_type_id]
         if woe_id.blank?
           response = Fleakr::Api::MethodRequest.with_response!('places.getTopPlacesList', :place_type_id => place_type_id)
         else
@@ -145,16 +142,28 @@ module Fleakr
       end
 
       # Find places by searching within a bounding box
-      def self.find_places_by_lat_lon(longitude,latitude,accuracy=16)
+      #FIXME - this should return only one
+      def self.find_one_by_lat_lon(options)
+        options[:accuracy] = 16 if options[:accuracy] == nil
+        
         response = Fleakr::Api::MethodRequest.with_response!('places.findByLatLon', 
-        :accuracy => accuracy, :lon => longitude, :lat => latitude)
-        (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
+        :accuracy => options[:accuracy], :lon => options[:lon], :lat => options[:lat])
+        
+        #There should only be one result, so only return first
+        (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) } [0]
       end
 
 
       # Find places by searching within a bounding box
-      def self.find_places_by_bounding_box(min_longitude, min_latitude, max_longitude, max_latitude,place_type_id=8)
-        bbox_string = "#{min_longitude},#{min_latitude},#{max_longitude},#{max_latitude}"
+      # options[:west] - longitude of the west side of the bounding box
+      # options[:east] - longitude of the east side of the bounding box
+      # options[:north] - latitude of the north side of the bounding box
+      # options[:south] - latitude of the south side of the bounding box
+      def self.find_all_by_bounding_box(options)
+        #min_longitude, min_latitude, max_longitude, max_latitude,place_type_id=8
+        place_type_id = (options[:place_type_id]==nil) ? 8 : options[:place_type_id]
+        
+        bbox_string = "#{options[:west]},#{options[:south]},#{options[:east]},#{options[:north]}"
         response = Fleakr::Api::MethodRequest.with_response!('places.placesForBoundingBox', 
         :place_type_id => place_type_id, :bbox=>bbox_string)
         (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) }
@@ -165,21 +174,22 @@ module Fleakr
       # A list of related tags.  Each of the objects in the collection is an instance of Tag
       def tags
         @tags ||= begin
-          Tag.find_all_by_woe_id(@woeid)
+          Tag.find_all_by_woe_id(@woe_id)
         end
       end
       
       #Overcome issue with name being an attribute or a text node depending on call used
       def initialize(document = nil, options = {})
-        self.populate_from(document) unless document.nil?
-        @authentication_options = options.extract!(:auth_token)
+        if document != nil
+          self.populate_from(document) unless document.nil?
+          if @name.blank?
+            @name = document.at('.').inner_text
+          else
+            @brief = false
+          end
         
-        if @name.blank?
-          @name = document.at('.').inner_text
-        else
-          @brief = false
         end
-        
+        @authentication_options = options.extract!(:auth_token)
       end
     end
     

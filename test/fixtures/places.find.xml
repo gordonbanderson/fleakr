@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rsp stat="ok">
+<places query="Eastbourne" total="4">
+	<place place_id="O8Jf6HCYCJ3dUw" woeid="19135" latitude="50.782" longitude="0.290" place_url="/United+Kingdom/England/Eastbourne" place_type="locality" place_type_id="7" timezone="Europe/London">Eastbourne, England, United Kingdom</place>
+	<place place_id="jM7n0k2bApgWDO1C" woeid="2348462" latitude="-41.295" longitude="174.896" place_url="/New+Zealand/Wellington/Eastbourne" place_type="locality" place_type_id="7" timezone="Pacific/Auckland">Eastbourne, Wellington, New Zealand</place>
+	<place place_id="yl0aXvqYAZWdAPmR" woeid="1095621" latitude="-36.216" longitude="148.666" place_url="/Australia/New+South+Wales/Eastbourne" place_type="locality" place_type_id="7" timezone="Australia/Sydney">Eastbourne, New South Wales, Australia</place>
+	<place place_id="HA0ErlucBJXcQoD_uQ" woeid="55999145" latitude="44.293" longitude="-79.475" place_url="/Canada/Ontario/Keswick/Eastbourne" place_type="neighbourhood" place_type_id="22" timezone="America/Toronto">Eastbourne, Keswick, ON, Canada</place>
+</places>
+</rsp>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rsp stat="ok">
+<places place_type="region" total="1" pages="1" page="1" bbox="-0.827,50.806,0.573,52.206">
+	<place place_id="pn4MsiGbBZlXeplyXg" woeid="24554868" latitude="52.883" longitude="-1.974" place_url="/United+Kingdom/England" place_type="region" place_type_id="8" timezone="Europe/London">England, GB, United Kingdom</place>
+</places>
+</rsp>
+<!-- FIXME find example with more entries -->

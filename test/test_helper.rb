@@ -114,7 +114,52 @@ class Test::Unit::TestCase
         klass.expects(:new).with(element, finder_options).returns(stub)
       end
       
-      klass.send("find_all_by_#{options[:by]}".to_sym, condition_value).should == stubs
+      method_name = options[:method_name]
+      method_name = "by_#{options[:by]}" if method_name.blank?
+      method_name = "find_all_#{method_name}" #Ensure find_all_ consistency
+      klass.send(method_name.to_sym, condition_value).should == stubs
+    end
+    
+  end
+  
+  # The place class does not follow the above methodology of one param, so allow for testing with multiple
+  # options[:params] - an array of the parameters
+  def self.should_find_all_with_multiple_parameters(thing, options)
+    class_name     = thing.to_s.singularize.camelcase
+    klass          = "Fleakr::Objects::#{class_name}".constantize
+    object_type    = class_name.downcase
+    
+    should "be able to find all #{thing} using #{options[:params].join(',')}" do
+      condition_value = '1'
+      #finder_options = {(options[:using] || options[:by]) => condition_value}
+      finder_options = {}
+      options[:params].map{|p| finder_options[p] = condition_value}
+      
+      # In the case of finding a place by bounding box, the parameters passed in the method are
+      # east, south, north and east, yet this is converted to a bbox string that is passed to flickr
+      flickr_options = options[:flickr_params]
+      if !flickr_options.blank?
+        response = mock_request_cycle :for => options[:call], :with => flickr_options
+      else
+        response = mock_request_cycle :for => options[:call], :with => finder_options
+      end
+      
+      
+      stubs = []
+      elements = (response.body/options[:path]).map
+      
+      
+      elements.each do |element|
+        stub = stub()
+        stubs << stub
+        
+        klass.expects(:new).with(element).returns(stub)
+      end
+      
+      method_name = options[:method_name]
+      method_name = "by_#{options[:by]}" if method_name.blank?
+      method_name = "find_all_#{method_name}" #Ensure find_all_ consistency
+      klass.send(method_name.to_sym, finder_options).should == stubs
     end
     
   end
