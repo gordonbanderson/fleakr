@@ -75,7 +75,7 @@ module Fleakr::Objects
         end
         
         should "not have a :resource_identifier" do
-          subject.resource_identifier.should be_nil
+          subject.resource_identifier.should be(nil)
         end
         
         should "know that it's retrieving a collection of resources" do
@@ -103,7 +103,7 @@ module Fleakr::Objects
         end
         
         should "not have a :resource_identifier" do
-          subject.resource_identifier.should be_nil
+          subject.resource_identifier.should be(nil)
         end
         
         should "return the resource" do
@@ -154,7 +154,7 @@ module Fleakr::Objects
         end
         
         should "not have a :resource_identifier" do
-          subject.resource_identifier.should be_nil
+          subject.resource_identifier.should be(nil)
         end
         
         should "return the resource" do
