@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rsp stat="ok">
+<places total="100">
+	<place place_id="SVrAMtCbAphCLAtP" woeid="2347563" latitude="37.271" longitude="-119.270" place_url="/United+States/California" place_type="region" place_type_id="8" timezone="America/Los_Angeles" photo_count="12934">California, US, United States</place>
+	<place place_id="pn4MsiGbBZlXeplyXg" woeid="24554868" latitude="52.883" longitude="-1.974" place_url="/United+Kingdom/England" place_type="region" place_type_id="8" timezone="Europe/London" photo_count="11465">England, GB, United Kingdom</place>
+	<place place_id="X2rdBEmbAphlKYoq" woeid="2347568" latitude="27.975" longitude="-81.541" place_url="/United+States/Florida" place_type="region" place_type_id="8" photo_count="5275">Florida, US, United States</place>
+	<place place_id="SfUOhpybApgiOUqd" woeid="2347569" latitude="32.678" longitude="-83.222" place_url="/United+States/Georgia" place_type="region" place_type_id="8" timezone="America/New_York" photo_count="5258">Georgia, US, United States</place>
+	<place place_id="hJJxLmabApiLFHxu" woeid="2347570" latitude="19.590" longitude="-155.434" place_url="/United+States/Hawaii" place_type="region" place_type_id="8" timezone="Pacific/Honolulu" photo_count="5151">Hawaii, US, United States</place>
+	<place place_id="8LwX6FSbApgD.7YC" woeid="2347606" latitude="47.274" longitude="-120.832" place_url="/United+States/Washington" place_type="region" place_type_id="8" timezone="America/Los_Angeles" photo_count="4119">Washington, US, United States</place>
+	<place place_id="V5QAdQebApgw_9XH" woeid="2345889" latitude="35.699" longitude="139.430" place_url="/Japan/Tokyo+Prefecture" place_type="region" place_type_id="8" timezone="Asia/Tokyo" photo_count="4077">Tokyo Prefecture, JP, Japan</place>
+	<place place_id="ep0T8vebApgnVGQJ" woeid="2347572" latitude="39.739" longitude="-89.504" place_url="/United+States/Illinois" place_type="region" place_type_id="8" timezone="America/Chicago" photo_count="3511">Illinois, US, United States</place>
+	<place place_id="R63H06ibApjqiWyL" woeid="2347591" latitude="42.855" longitude="-76.501" place_url="/United+States/New+York" place_type="region" place_type_id="8" timezone="America/New_York" photo_count="3063">New York, US, United States</place>
+	<!-- snipped - tag for fish -->
+</places>
+</rsp>

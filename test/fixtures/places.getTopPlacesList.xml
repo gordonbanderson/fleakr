@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rsp stat="ok">
+<places total="100" date_start="1271030400" date_stop="1271116799">
+	<place place_id="R63H06ibApjqiWyL" woeid="2347591" latitude="42.855" longitude="-76.501" place_url="/United+States/New+York" place_type="region" place_type_id="8" timezone="America/New_York" photo_count="4205">New York, US, United States</place>
+	<place place_id="SVrAMtCbAphCLAtP" woeid="2347563" latitude="37.271" longitude="-119.270" place_url="/United+States/California" place_type="region" place_type_id="8" timezone="America/Los_Angeles" photo_count="3928">California, US, United States</place>
+	<place place_id="pn4MsiGbBZlXeplyXg" woeid="24554868" latitude="52.883" longitude="-1.974" place_url="/United+Kingdom/England" place_type="region" place_type_id="8" timezone="Europe/London" photo_count="3607">England, GB, United Kingdom</place>
+	<place place_id="UbhPUD6bAphsxXM4" woeid="2344710" latitude="48.221" longitude="15.760" place_url="/Austria/Lower+Austria" place_type="region" place_type_id="8" timezone="Europe/Vienna" photo_count="1470">Lower Austria, AT, Austria</place>
+	<place place_id="kfD.4gubAZwCvKcDlA" woeid="20070335" latitude="23.598" longitude="121.017" place_url="/Taiwan/Taiwan" place_type="region" place_type_id="8" timezone="Asia/Taipei" photo_count="1412">Taiwan, TW, Taiwan</place>
+	<place place_id="X2rdBEmbAphlKYoq" woeid="2347568" latitude="27.975" longitude="-81.541" place_url="/United+States/Florida" place_type="region" place_type_id="8" photo_count="1310">Florida, US, United States</place>
+<!-- snip -->
+</places>
+</rsp>
