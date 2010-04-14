@@ -47,7 +47,7 @@ class FleakrTest < Test::Unit::TestCase
       Fleakr::Objects::User.stubs(:find_by_email).with(data, {}).raises(Fleakr::ApiError)
       Fleakr::Objects::User.stubs(:find_by_url).with(data, {}).raises(Fleakr::ApiError)
             
-      Fleakr.user(data).should be_nil
+      Fleakr.user(data).should be(nil)
     end
     
     should "provide additional options to the finder call if supplied" do
