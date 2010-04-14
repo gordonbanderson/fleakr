@@ -15,6 +15,10 @@ module Fleakr::Objects
       should_find_all :photos, :by => :group_id, :call => 'groups.pools.getPhotos', :path => 'rsp/photos/photo'
       
       should_find_one :photo, :by => :id, :with => :photo_id, :call => 'photos.getInfo'
+      
+      #Test write methods
+      should_be_able_to_set :tags, :with => [:tags, :photo_id], :call => 'photos.setTags'
+      
 
       # TODO: refactor these 2 tests
       should "be able to upload a photo and return the new photo information" do
