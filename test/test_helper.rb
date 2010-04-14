@@ -114,7 +114,10 @@ class Test::Unit::TestCase
         klass.expects(:new).with(element, finder_options).returns(stub)
       end
       
-      klass.send("find_all_by_#{options[:by]}".to_sym, condition_value).should == stubs
+      method_name = options[:method_name]
+      method_name = "by_#{options[:by]}" if method_name.blank?
+      method_name = "find_all_#{method_name}" #Ensure find_all_ consistency
+      klass.send(method_name.to_sym, condition_value).should == stubs
     end
     
   end
