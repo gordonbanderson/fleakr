@@ -135,7 +135,15 @@ class Test::Unit::TestCase
       finder_options = {}
       options[:params].map{|p| finder_options[p] = condition_value}
       
-      response = mock_request_cycle :for => options[:call], :with => finder_options
+      # In the case of finding a place by bounding box, the parameters passed in the method are
+      # east, south, north and east, yet this is converted to a bbox string that is passed to flickr
+      flickr_options = options[:flickr_params]
+      if !flickr_options.blank?
+        response = mock_request_cycle :for => options[:call], :with => flickr_options
+      else
+        response = mock_request_cycle :for => options[:call], :with => finder_options
+      end
+      
       
       stubs = []
       elements = (response.body/options[:path]).map
