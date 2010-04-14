@@ -54,7 +54,7 @@ module Fleakr
       find_all :by_query, :call => 'places.find', :path => 'places/place'
       
       #Find places that are the children of a given place and have public photographs
-      find_all :children_with_public_photos, :using => :woe_id, :call=> 'places.getChildrenWithPhotosPublic',:path => 'places/place'
+      find_all :children_with_photos_public, :using => :woe_id, :call=> 'places.getChildrenWithPhotosPublic',:path => 'places/place'
       
       
       # Use the flickr search API to find all photos associated with this place
@@ -127,8 +127,12 @@ module Fleakr
       end
       
       
-      #Return top geotagged places for the previous day
-      def self.find_top_places(place_type_id = 8, woe_id = nil)
+      #Return top geotagged places for the previous day by default
+      # options[:place_type_id] - the place type id being searched for
+      # options[:woe_id] - the parent woe id, if you are looking for top places in e.g. New Zealand
+      def self.find_all_top_places(options={})
+        woe_id = options[:woe_id]
+        place_type_id = (options[:place_type_id]==nil) ? 8 : options[:place_type_id]
         if woe_id.blank?
           response = Fleakr::Api::MethodRequest.with_response!('places.getTopPlacesList', :place_type_id => place_type_id)
         else
