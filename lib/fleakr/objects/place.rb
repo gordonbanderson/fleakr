@@ -163,7 +163,7 @@ module Fleakr
       # A list of related tags.  Each of the objects in the collection is an instance of Tag
       def tags
         @tags ||= begin
-          Tag.find_all_by_woe_id(@woeid)
+          Tag.find_all_by_woe_id(@woe_id)
         end
       end
       
