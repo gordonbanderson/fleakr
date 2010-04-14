@@ -143,7 +143,7 @@ module Fleakr
 
       # Find places by searching within a bounding box
       #FIXME - this should return only one
-      def self.find_by_lat_lon(options)
+      def self.find_one_by_lat_lon(options)
         options[:accuracy] = 16 if options[:accuracy] == nil
         
         response = Fleakr::Api::MethodRequest.with_response!('places.findByLatLon', 
