@@ -122,6 +122,40 @@ class Test::Unit::TestCase
     
   end
   
+  # The place class does not follow the above methodology of one param, so allow for testing with multiple
+  # options[:params] - an array of the parameters
+  def self.should_find_all_with_multiple_parameters(thing, options)
+    class_name     = thing.to_s.singularize.camelcase
+    klass          = "Fleakr::Objects::#{class_name}".constantize
+    object_type    = class_name.downcase
+    
+    should "be able to find all #{thing} using #{options[:params].join(',')}" do
+      condition_value = '1'
+      #finder_options = {(options[:using] || options[:by]) => condition_value}
+      finder_options = {}
+      options[:params].map{|p| finder_options[p] = condition_value}
+      
+      response = mock_request_cycle :for => options[:call], :with => finder_options
+      
+      stubs = []
+      elements = (response.body/options[:path]).map
+      
+      
+      elements.each do |element|
+        stub = stub()
+        stubs << stub
+        
+        klass.expects(:new).with(element).returns(stub)
+      end
+      
+      method_name = options[:method_name]
+      method_name = "by_#{options[:by]}" if method_name.blank?
+      method_name = "find_all_#{method_name}" #Ensure find_all_ consistency
+      klass.send(method_name.to_sym, finder_options).should == stubs
+    end
+    
+  end
+  
   def read_fixture(method_call)
     fixture_path = File.dirname(__FILE__) + '/fixtures'
     File.read("#{fixture_path}/#{method_call}.xml")
