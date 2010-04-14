@@ -109,7 +109,7 @@ module Fleakr::Api
         Fleakr.stubs(:auth_token).with().returns(nil)
         
         pl = ParameterList.new
-        pl.authentication_token.should be_nil
+        pl.authentication_token.should be(nil)
       end
 
       should "be able to generate a boundary for post data" do
