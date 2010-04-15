@@ -17,7 +17,7 @@ module Fleakr::Objects
       should_find_one :photo, :by => :id, :with => :photo_id, :call => 'photos.getInfo'
       
       #Test write methods
-      should_be_able_to_set :tags, :with => [:tags, :photo_id], :call => 'photos.setTags'
+      should_be_able_to_set :photo, :method => :tags, :using => [:tags], :call => 'photos.setTags'
       
 
       # TODO: refactor these 2 tests
