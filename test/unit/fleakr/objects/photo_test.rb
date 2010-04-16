@@ -18,6 +18,8 @@ module Fleakr::Objects
       
       #Test write methods
       should_be_able_to_set :photo, :method => :set_tags, :using => [:tags], :call => 'photos.setTags'
+      should_be_able_to_set :photo, :method => :add_tags, :using => [:tags], :call => 'photos.addTags'
+      should_be_able_to_set :photo, :method => :rotate, :using => [:degrees], :call => 'photos.transform.rotate'
       
 
       # TODO: refactor these 2 tests
