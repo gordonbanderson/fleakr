@@ -1,5 +1,3 @@
-$:.reject! { |e| e.include? 'TextMate' }
-
 require 'rubygems'
 require 'test/unit'
 require 'shoulda'
@@ -163,6 +161,52 @@ class Test::Unit::TestCase
     end
     
   end
+  
+
+=begin
+should "be able to retrieve additional information about the current user" do
+  photo_id = '1'
+  photo = Photo.new
+  photo.expects(:id).with().returns(photo_id)
+  response = mock_request_cycle :for => 'photos.getInfo', :with => {:photo_id => photo_id}
+  
+  photo.expects(:populate_from).with(response.body)
+
+  photo.load_info
+end
+=end
+
+  # Test where or not the relevant set method was called with correct API call to Flickr
+  def self.should_be_able_to_set(thing, options)
+    should "be able to set #{options[:method]} with params #{options[:using].join(',')}" do
+    class_name  = thing.to_s.singularize.camelcase
+    klass       = "Fleakr::Objects::#{class_name}".constantize
+    object_type = class_name.downcase
+    model_instance = klass::new
+    instance_id = '1'
+    model_instance.expects(:id).with().returns(instance_id)
+    model_instance.id = instance_id
+
+    condition_value = '1'
+
+    params = {}
+    options[:using].map{|p| params[p] = condition_value}
+
+    response = stub(:body => '<rsp></rsp>')
+    thing_id_string = "#{thing}_id"
+    thing_id_string.gsub!('set','photoset') #Set does not map with thing => thing_id
+    flickr_params = {thing_id_string.to_sym => condition_value}
+    method_params = ["#{options[:method]}"]
+    for param in options[:using]
+      method_params << condition_value
+      flickr_params[param] = condition_value
+    end
+    Fleakr::Api::WriteMethodRequest.expects(:with_response!).with(options[:call], flickr_params).returns(response)
+
+    model_instance.send(*method_params)
+    end
+     
+   end
   
   def read_fixture(method_call)
     fixture_path = File.dirname(__FILE__) + '/fixtures'

@@ -12,6 +12,9 @@ module Fleakr::Objects
       should_find_all :sets, :by => :user_id, :call => 'photosets.getList', :path => 'rsp/photosets/photoset'
       should_find_one :set, :by => :id, :with => :photoset_id, :call => 'photosets.getInfo', :path => 'rsp/photoset'
       
+      should_be_able_to_set :set, :method => :set_title_and_description,
+                            :using => [:title,:description], :call => 'photosets.editMeta'
+      
     end
 
     context "An instance of the Set class" do

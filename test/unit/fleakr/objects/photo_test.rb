@@ -15,6 +15,16 @@ module Fleakr::Objects
       should_find_all :photos, :by => :group_id, :call => 'groups.pools.getPhotos', :path => 'rsp/photos/photo'
       
       should_find_one :photo, :by => :id, :with => :photo_id, :call => 'photos.getInfo'
+      
+      #Test write methods
+      should_be_able_to_set :photo, :method => :set_tags, :using => [:tags], :call => 'photos.setTags'
+      should_be_able_to_set :photo, :method => :add_tags, :using => [:tags], :call => 'photos.addTags'
+      should_be_able_to_set :photo, :method => :rotate, :using => [:degrees], :call => 'photos.transform.rotate'
+      should_be_able_to_set :photo, :method => :set_date, :using => [:date_taken], :call => 'photos.setDates'
+      should_be_able_to_set :photo, :method => :set_location, :using => [:lon,:lat,:accuracy], :call => 'photos.geo.setLocation'
+      should_be_able_to_set :photo, :method => :set_title_and_description,
+                            :using => [:title,:description], :call => 'photos.setMeta'
+      
 
       # TODO: refactor these 2 tests
       should "be able to upload a photo and return the new photo information" do
