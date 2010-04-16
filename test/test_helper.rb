@@ -147,19 +147,17 @@ end
     params = {}
     options[:using].map{|p| params[p] = condition_value}
 
-    puts "PARAMS:#{params.to_yaml}"
-    puts "OPTIONS CALL = #{options[:call]}"
     response = stub(:body => '<rsp></rsp>')
-    flickr_params = {"#{thing}_id".to_sym => condition_value}
+    thing_id_string = "#{thing}_id"
+    thing_id_string.gsub!('set','photoset') #Set does not map with thing => thing_id
+    flickr_params = {thing_id_string.to_sym => condition_value}
     method_params = ["#{options[:method]}"]
     for param in options[:using]
       method_params << condition_value
       flickr_params[param] = condition_value
     end
     Fleakr::Api::WriteMethodRequest.expects(:with_response!).with(options[:call], flickr_params).returns(response)
-   
-    
-    puts "METHOD PARAMS:#{method_params.to_yaml}"
+
     model_instance.send(*method_params)
     end
      
