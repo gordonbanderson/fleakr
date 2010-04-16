@@ -151,7 +151,7 @@ end
     puts "OPTIONS CALL = #{options[:call]}"
     response = stub(:body => '<rsp></rsp>')
     flickr_params = {"#{thing}_id".to_sym => condition_value}
-    method_params = ["set_#{options[:method]}"]
+    method_params = ["#{options[:method]}"]
     for param in options[:using]
       method_params << condition_value
       flickr_params[param] = condition_value
