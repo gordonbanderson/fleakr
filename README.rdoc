@@ -91,32 +91,39 @@ When accessing a set, you can also grab all the photos that are in that set:
     >> user.sets.first.photos.first.title
     => "Untitled1"
 
+You can also update the title and description of a set
+
+    >> user.sets.first.set_title_and_description("Commuting in Bangkok", "Some images of a 35km commute from Bangkok to Nonthaburi")
+
 === Exif Data
 
 Exif data for an uploaded photograph can be accessed as in the following example:
 
-  photo = Fleakr::Objects::Photo.find_by_id('4507120023')
-  for exif in photo.exifs
-    puts "#{exif.tag} => #{exif.raw}"
-  end
+    photo = Fleakr::Objects::Photo.find_by_id('4507120023')
+    for exif in photo.exifs
+      puts "#{exif.tag} => #{exif.raw}"
+    end
 
 Sample output looks like
-  FileName => ORI9141194487814365231.img
-  Directory => /home/y/tmp/3
-  FileSize => 3.2 MB
-  FileModifyDate => 2010:04:10 11:55:56+00:00
-  FileType => JPEG
-  MIMEType => image/jpeg
-  ImageWidth => 3264
-  ImageHeight => 2448
-  EncodingProcess => Baseline DCT, Huffman coding
-  BitsPerSample => 8
-  ColorComponents => 3
-  YCbCrSubSampling => YCbCr4:2:2 (2 1)
-  Make => Panasonic
-  Model => DMC-LZ8
+    FileName => ORI9141194487814365231.img
+    Directory => /home/y/tmp/3
+    FileSize => 3.2 MB
+    FileModifyDate => 2010:04:10 11:55:56+00:00
+    FileType => JPEG
+    MIMEType => image/jpeg
+    ImageWidth => 3264
+    ImageHeight => 2448
+    EncodingProcess => Baseline DCT, Huffman coding
+    BitsPerSample => 8
+    ColorComponents => 3
+    YCbCrSubSampling => YCbCr4:2:2 (2 1)
+    Make => Panasonic
+    Model => DMC-LZ8
   ...
   ...<snip>
+
+
+
 
 === Contacts
 
@@ -394,6 +401,37 @@ automatically scope your requests to the authenticated user:
 From there, you can make any of the usual calls available with the API. See 
 Fleakr::Objects::User for more information.
 
+=== Updating Photo Details
+
+With a handle on a photograph, it is possible to edit some of the properties of that photo.  Obtain a photo by it's id:
+    
+    >> photo = Fleakr::Objects::Photo.find_by_id(4503097262)
+
+Update the title and description:
+
+    >> photo.set_title_and_description("Sky Train", "Sky train entering Ratchathewi BTS station in central Bangkok")
+
+Set the tags:
+    
+    >> photo.set_tags("train,sky train,BTS,commuting,Thailand, Ratchathewi")
+
+Append some additional tags:
+    
+    >> photo.add_tags("Bangkok")
+
+Rotate the photo - note that this can only be right angles:
+    
+    >> photo.rotate(270)
+
+Set the date and time
+    
+    >> photo.set_date('2004-11-29 16:01:26')
+
+Set the location (longitude, latitude):
+    
+    >> photo.set_location(100.542, 13.756)
+    
+    
 === What Went Wrong?
 
 Because so much of the underlying API is hidden under the covers, it's often tough to know
