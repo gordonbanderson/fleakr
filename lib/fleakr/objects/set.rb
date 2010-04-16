@@ -74,6 +74,16 @@ module Fleakr
         self.populate_from(response.body)
       end
       
+      # Set title and description for a photograph
+      # [:title] The new title
+      # [:description] The new description
+      def set_title_and_description(title, description)
+        options = {:title => title, :description => description, :photoset_id => id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('photosets.editMeta', options)
+        @title = title
+        @description = description
+      end
+      
     end
   end
 end
