@@ -120,11 +120,13 @@ module Fleakr
       #This returns places for the contacts of the currently authenticated user
       def self.find_all_by_contacts_of_authenticated_user(place_type_id = 8, woe_id = nil)
         if woe_id.blank?
-          response = Fleakr::Api::MethodRequest.with_response!('places.placesForContacts', :place_type_id => place_type_id)
+          options = {:place_type_id => place_type_id}
         else
-          response = Fleakr::Api::MethodRequest.with_response!('places.placesForContacts', :woe_id => woe_id, :place_type_id => place_type_id)
+          options = {:woe_id => woe_id, :place_type_id => place_type_id }
         end
-        (response.body/'places/place').map {|e| Place.new(e) }
+        response = Fleakr::Api::MethodRequest.with_response!('places.placesForContacts', options)
+        
+        (response.body/'places/place').map {|e| Place.new(e,options) }
       end
       
       
