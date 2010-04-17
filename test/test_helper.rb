@@ -100,7 +100,7 @@ class Test::Unit::TestCase
     if options[:by] != nil
       block_description = "be able to find all #{thing} by #{options[:by]}"
     else
-      block_description = "be able to find all #{thing} by method #{options[:method]} using #{options[:using]}"
+      block_description = "be able to find all #{thing} by method #{options[:method_name]} using #{options[:using]}"
     end
     should block_description do
       condition_value = '1'
