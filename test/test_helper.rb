@@ -97,7 +97,12 @@ class Test::Unit::TestCase
     klass          = "Fleakr::Objects::#{class_name}".constantize
     object_type    = class_name.downcase
     
-    should "be able to find all #{thing} by #{options[:by]}" do
+    if options[:by] != nil
+      block_description = "be able to find all #{thing} by #{options[:by]}"
+    else
+      block_description = "be able to find all #{thing} by method #{options[:method]} using #{options[:using]}"
+    end
+    should block_description do
       condition_value = '1'
       finder_options = {(options[:using] || options[:by]) => condition_value}
     
