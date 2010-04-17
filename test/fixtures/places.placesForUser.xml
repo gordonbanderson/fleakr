@@ -1,0 +1,12 @@
+<rsp stat="ok">
+<places total="8">
+	<place place_id="TAWpUtybApjV7M00" woeid="2347165" latitude="13.723" longitude="100.633" place_url="/Thailand/Bangkok" place_type="region" place_type_id="8" timezone="Asia/Bangkok" photo_count="532">Bangkok, TH, Thailand</place>
+	<place place_id="PGTcuFKYBJzcTUMwPA" woeid="15021762" latitude="-41.136" longitude="175.473" place_url="/New+Zealand/Wellington" place_type="region" place_type_id="8" timezone="Pacific/Auckland" photo_count="134">Wellington, NZ, New Zealand</place>
+	<place place_id="IxlaH66YBJyT4TMdwg" woeid="15021756" latitude="-36.700" longitude="174.678" place_url="/New+Zealand/Auckland" place_type="region" place_type_id="8" timezone="Pacific/Auckland" photo_count="128">Auckland, NZ, New Zealand</place>
+	<place place_id="QJzoyVmYBJzDKKACHA" woeid="15021755" latitude="-35.398" longitude="173.629" place_url="/New+Zealand/Northland" place_type="region" place_type_id="8" timezone="Pacific/Auckland" photo_count="115">Northland, NZ, New Zealand</place>
+	<place place_id="wzvy1nCbAphoptuJ" woeid="2347163" latitude="13.964" longitude="100.416" place_url="/Thailand/Nonthaburi" place_type="region" place_type_id="8" timezone="Asia/Bangkok" photo_count="84">Nonthaburi, TH, Thailand</place>
+	<place place_id="DfKk_rubAphzP75B" woeid="2347170" latitude="13.091" longitude="101.276" place_url="/Thailand/Chon+Buri" place_type="region" place_type_id="8" timezone="Asia/Bangkok" photo_count="22">Chon Buri, TH, Thailand</place>
+	<place place_id="0KoA4.yYBJz6WUs2qg" woeid="15021759" latitude="-41.688" longitude="173.517" place_url="/New+Zealand/Marlborough" place_type="region" place_type_id="8" timezone="Pacific/Auckland" photo_count="2">Marlborough, NZ, New Zealand</place>
+	<place place_id="doHw.BaYBJwjU1rpXQ" woeid="15021765" latitude="-37.884" longitude="175.558" place_url="/New+Zealand/Waikato" place_type="region" place_type_id="8" timezone="Pacific/Auckland" photo_count="1">Waikato, NZ, New Zealand</place>
+</places>
+</rsp>

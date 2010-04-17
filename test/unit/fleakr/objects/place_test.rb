@@ -8,6 +8,7 @@ module Fleakr::Objects
     context "The Place class" do
       should_find_all :places, :by => :query, :call => 'places.find', :path => 'rsp/places/place'
       should_find_all :places, :using => :place_type_id, :method_name => 'by_authenticated_user', :call => 'places.placesForUser', :path => 'rsp/places/place'
+      should_find_all :places, :using => :place_type_id, :method_name => 'by_contacts_of_authenticated_user', :call => 'places.placesForContacts', :path => 'rsp/places/place'
       should_find_all :places,  :using => :woe_id, :method_name => 'children_with_photos_public',
           :call => 'places.getChildrenWithPhotosPublic', :path => 'rsp/places/place'
       
@@ -17,9 +18,7 @@ module Fleakr::Objects
       should_find_all_with_multiple_parameters :places, :params => [:west,:east,:north,:south,:place_type_id],
         :flickr_params => {:bbox => "1,1,1,1", :place_type_id => '1'}, 
         :method_name => 'by_bounding_box', :call => 'places.placesForBoundingBox', :path => 'rsp/places/place'
-      
 
-      
       should_find_one :place, :by => :woe_id, :call => 'places.getInfo', :path => 'rsp/place'
       should_find_one :place, :by => :url, :call => 'places.getInfoByUrl', :path => 'rsp/place'
       
