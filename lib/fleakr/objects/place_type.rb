@@ -11,8 +11,25 @@ module Fleakr
     # [place_type_id] Internal flickr id of the place type
     #
     class PlaceType
-      
       include Fleakr::Support::Object
+      
+      # Constant to indicate the place type is a neighbourhood
+      NEIGHBOURHOOD=22
+      
+      # Constant to indicate the place type is a locality
+      LOCALITY = 7
+      
+      # Constant to indicate the place type is a county
+      COUNTY = 9
+      
+      # Constant to indicate the place type is a region
+      REGION = 8
+      
+      # Constant to indicate the place type is a country
+      COUNTRY = 12
+      
+      # Constant to indicate the place type is a continent
+      CONTINENT = 29
       
       #If a place comes from a text search then it will have less information than the getInfo method.  use this flag so
       #as to know when to lazily called getInfo
