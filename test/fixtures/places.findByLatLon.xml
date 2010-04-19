@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rsp stat="ok">
+<places latitude="-41.3" longitude="174.77" accuracy="6" total="1">
+        <place place_id="W3yDLKacBJTsmzdUPw" woeid="55875846" latitude="-41.252" longitude="174.754" place_url="/W3yDLKacBJTsmzdUPw" place_type="county" place_type_id="9" timezone="Pacific/Auckland" name="Wellington City, Wellington, New Zealand" />
+</places>
+</rsp>
