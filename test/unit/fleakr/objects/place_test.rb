@@ -26,6 +26,9 @@ module Fleakr::Objects
       should_find_one_with_multiple_parameters :places, :params => [:latitude,:longitude,:accuracy],
       :flickr_params => {:lat => "1", :lon => '1', :accuracy => '1'},
         :method_name => 'by_coordinate', :call => 'places.findByLatLon', :path => 'rsp/places/place'
+        
+      #TO TEST
+      #find_all_by_contacts_of_authenticated_user
       #find_one_by_coordinate 
       #photos within radius
       #should_find_all :places, :by => :tags, :with => {:place_type_id => 8}, :call => 'places.placesForTags', :path => 'rsp/places/place'
