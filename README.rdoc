@@ -222,6 +222,70 @@ in turn, can have either collections or sets associated with them. For example:
 Note that collections are limited to Flickr pro members. See Fleakr::Objects::Collection for more 
 information.
 
+=== Places
+
+Places in Flickr use the Yahoo Geoplanet dataset which is provided under the creative commons license.  A geographic location (latitude and longitude) can be converted to a place, and thus see other photographs taken in the same place, be it a neighbourhood, a region or a country.
+
+Find a place by search string
+
+    >> places = Fleakr::Objects::Place.find_all_by_query('Wellington, New Zealand')
+
+Find a place by its URL
+
+    >> place = Fleakr::Objects::Place.find_by_url('/United+Kingdom/England/Eastbourne')
+
+Or by its WOE (Where On Earth) id:
+
+    >> place = Fleakr::Objects::Place.find_by_woe_id(19135)
+
+Find places by tags
+
+    >> places = Fleakr::Objects::Place.find_all_by_tags('volcano,volcanic')
+
+Or find top places (most tagging activity in previous 24 hours by default)
+
+    >> places = Fleakr::Objects::Place.find_all_top_places
+
+Or find a place by coordinate and desired accuracy
+
+    >> wellington = Fleakr::Objects::Place.find_one_by_coordinate(:latitude => -41.3, :longitude => 174.77,
+    :accuracy => Fleakr::Objects::Accuracy::REGION)
+
+Find photos within a radius of a place, in this case 5km
+
+    >> photos = wellington.find_all_photos_within_radius(5)
+
+Find places within a bounding box
+
+    >> places = Fleakr::Objects::Place.find_all_by_bounding_box(:west => 176.2,
+                                                        :east => 176.3,
+                                                        :south => -38.2,
+                                                        :north => -38.1,
+                                                        :place_type_id => Fleakr::Objects::PlaceType::NEIGHBOURHOOD
+                                                        )
+
+Find places for a given tag
+
+    >> tag = Fleakr::Objects::Photo.find_by_id(4503097262).tags[0] # << this is 'train'
+    >> places = tag.places( :place_type_id => Fleakr::Objects::PlaceType::NEIGHBOURHOOD)
+
+Find tags for a place
+
+    >> tags = wellington.tags
+
+Find localities of geo-located images for the authenticated user
+
+    >> places = Fleakr::Objects::Place.find_all_by_authenticated_user(Fleakr::Objects::PlaceType::LOCALITY)
+
+Find regions of geo-located images for contacts of the authenticated user
+
+    >> places = Fleakr::Objects::Place.find_all_by_contacts_of_authenticated_user(Fleakr::Objects::PlaceType::REGION)
+
+Find places that are children and have photos
+
+    >> places = Fleakr::Objects::Place.find_all_children_with_photos_public(wellington.woe_id)
+
+
 === Saving Images
 
 If a photo interests you, save it down to a directory of your choosing:
