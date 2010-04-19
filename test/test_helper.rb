@@ -127,6 +127,41 @@ class Test::Unit::TestCase
   
   # The place class does not follow the above methodology of one param, so allow for testing with multiple
   # options[:params] - an array of the parameters
+  def self.should_find_one_with_multiple_parameters(thing, options)
+    class_name  = thing.to_s.singularize.camelcase
+    klass       = "Fleakr::Objects::#{class_name}".constantize
+    object_type = class_name.downcase    
+=begin
+stub = stub()
+response = mock_request_cycle :for => options[:call], :with => params
+
+klass.expects(:new).with(response.body, params).returns(stub)
+klass.send("find_by_#{options[:by]}".to_sym, condition_value).should == stub
+=end
+    should "be able to find a #{thing} by #{options[:method_name]}" do
+      condition_value = '1'
+      #finder_options = {(options[:using] || options[:by]) => condition_value}
+      finder_options = {}
+      options[:params].map{|p| finder_options[p] = condition_value}
+      
+      stub = stub()
+      flickr_options = options[:flickr_params]
+      if !flickr_options.blank?
+        response = mock_request_cycle :for => options[:call], :with => flickr_options
+      else
+        response = mock_request_cycle :for => options[:call], :with => finder_options
+      end
+      klass.expects(:new).with(response.body/options[:path]).returns(stub)
+      
+      method_name = options[:method_name]
+      method_name = "by_#{options[:by]}" if method_name.blank?
+      method_name = "find_one_#{method_name}" #Ensure find_all_ consistency
+      klass.send("#{method_name}".to_sym, finder_options).should == stub
+    end
+  end
+  
+  # The place class does not follow the above methodology of one param, so allow for testing with multiple
+  # options[:params] - an array of the parameters
   def self.should_find_all_with_multiple_parameters(thing, options)
     class_name     = thing.to_s.singularize.camelcase
     klass          = "Fleakr::Objects::#{class_name}".constantize

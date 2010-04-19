@@ -41,9 +41,9 @@ module Fleakr
       
       # A list of related tags.  Each of the objects in the collection is an instance of Tag
       #
-      def places
+      def places(options={})
         @places ||= begin
-          Place.find_all_by_tags(@value, @woe_id)
+          Place.find_all_by_tags(@value, options)
         end
       end
       

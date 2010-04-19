@@ -63,8 +63,8 @@ module Fleakr
       end
       
       #Use the flickr search API to find all photos with a radius of the centre point of the place
-      def photos_within_radius(radius_km)
-        Fleakr::Objects::Photo.find_all_by_search(:latitude => @latitude, :longitude => @longitude, :radius => radius_km)
+      def find_all_photos_within_radius(radius_km)
+        Fleakr::Objects::Photo.find_all_by_search(:lat => @latitude, :lon => @longitude, :radius => radius_km)
       end
       
       def load_info # :nodoc:
@@ -93,9 +93,6 @@ module Fleakr
         place_type_id = 8
         place_type_id = options[:place_type_id] if options[:place_type_id] != nil
         woe_id = options[:woe_id]
-        
-        
-        
         if woe_id.blank?
           response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :tags => tags, :place_type_id => place_type_id)
         else
@@ -146,11 +143,11 @@ module Fleakr
 
       # Find places by searching within a bounding box
       #FIXME - this should return only one
-      def self.find_one_by_lat_lon(options)
+      def self.find_one_by_coordinate(options)
         options[:accuracy] = 16 if options[:accuracy] == nil
         
         response = Fleakr::Api::MethodRequest.with_response!('places.findByLatLon', 
-        :accuracy => options[:accuracy], :lon => options[:lon], :lat => options[:lat])
+        :accuracy => options[:accuracy], :lon => options[:longitude], :lat => options[:latitude])
         
         #There should only be one result, so only return first
         (response.body/'rsp/places/place').map {|e| Fleakr::Objects::Place.new(e) } [0]
