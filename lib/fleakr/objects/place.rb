@@ -88,15 +88,15 @@ module Fleakr
  
       
       
-      def self.find_all_by_tags(tags, options={})
+      def self.find_all_by_tags(options={})
         #options[:place_type_id] = 8 if options[:place_type_id] == nil
         place_type_id = 8
         place_type_id = options[:place_type_id] if options[:place_type_id] != nil
         woe_id = options[:woe_id]
         if woe_id.blank?
-          response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :tags => tags, :place_type_id => place_type_id)
+          response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :tags => options[:tags], :place_type_id => place_type_id)
         else
-          response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :woe_id => woe_id, :tags => tags, :place_type_id => place_type_id)
+          response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :woe_id => woe_id, :tags => options[:tags], :place_type_id => place_type_id)
         end
         (response.body/'places/place').map {|e| Place.new(e) }
       end
