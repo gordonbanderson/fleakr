@@ -116,7 +116,7 @@ module Fleakr
       # [:longitude] The new longitude
       # [:latitude] The new latitude
       # [:accuracy] The new accuracy
-      def set_location(longitude, latitude)
+      def set_location(longitude, latitude, accuracy)
         options = {:lat => latitude, :lon => longitude, :accuracy => accuracy, :photo_id => id}
         response = Fleakr::Api::WriteMethodRequest.with_response!('photos.geo.setLocation', options)
       end
