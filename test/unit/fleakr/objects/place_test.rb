@@ -20,11 +20,6 @@ module Fleakr::Objects
       should_find_one :place, :by => :url, :call => 'places.getInfoByUrl', :path => 'rsp/place'
       should_find_all_with_multiple_parameters :places, :method_name => 'by_tags', :params => [:place_type_id, :tags],
           :call => 'places.placesForTags', :path => 'rsp/places/place', :flickr_param => {:place_type_id => 8, :tags=>'1'}
-      
-      
-          #should_find_one_with_multiple_parameters :places, :params => [:latitude,:longitude,:accuracy],
-          #:flickr_params => {:lat => "1", :lon => '1', :accuracy => '1'},
-          #  :method_name => 'by_coordinate', :call => 'places.findByLatLon', :path => 'rsp/places/place'
       should "be able to find one by coordinate" do
         response = mock_request_cycle :for => 'places.findByLatLon', :with => {:accuracy => 16, :lat => 175, :lon => -41}
         stub = stub()
