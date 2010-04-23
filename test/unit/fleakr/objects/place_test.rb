@@ -28,9 +28,8 @@ module Fleakr::Objects
       #  :method_name => 'by_coordinate', :call => 'places.findByLatLon', :path => 'rsp/places/place'
         
       #TO TEST
-      #find_all_by_contacts_of_authenticated_user
       #find_one_by_coordinate 
-      #photos within radius
+
       
 
       should_find_all_with_multiple_parameters :places, :method_name => 'by_tags', :params => [:place_type_id, :tags],
@@ -43,6 +42,8 @@ module Fleakr::Objects
       setup do
         @place = Place::new
         @place.woe_id = 19135
+        @place.latitude = -41
+        @place.longitude = 175
       end
       
       context "when populating from the places_find XML data" do
@@ -72,6 +73,37 @@ module Fleakr::Objects
           Tag.expects(:new).with(element).returns(stub)
         end
         @place.tags.should == stubs
+      end
+      
+      should "have photos" do
+        response = mock_request_cycle :for => 'photos.search', :with => {
+          :extras => 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o',
+          :woe_id => 19135}
+        stubs = []
+        elements = (response.body/'rsp/photos/photo').map
+        elements.each do |element|
+          stub = stub()
+          stubs << stub
+          Photo.expects(:new).with(element).returns(stub)
+        end
+        @place.photos.should == stubs
+      end
+      
+      should "have photos within a radius" do
+        response = mock_request_cycle :for => 'photos.search', :with => {
+          :extras => 'description, license, date_upload, date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_t, url_s, url_m, url_o',
+          :lat => -41,
+          :lon => 175,
+          :radius => 4
+          }
+        stubs = []
+        elements = (response.body/'rsp/photos/photo').map
+        elements.each do |element|
+          stub = stub()
+          stubs << stub
+          Photo.expects(:new).with(element).returns(stub)
+        end
+        @place.photos_within_radius(4).should == stubs
       end
     end
     
