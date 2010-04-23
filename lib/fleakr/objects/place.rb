@@ -59,11 +59,11 @@ module Fleakr
       
       # Use the flickr search API to find all photos associated with this place
       def photos
-        photos = Fleakr::Objects::Photo.find_all_by_search(:woe_id => woeid)
+        photos = Fleakr::Objects::Photo.find_all_by_search(:woe_id => woe_id)
       end
       
       #Use the flickr search API to find all photos with a radius of the centre point of the place
-      def find_all_photos_within_radius(radius_km)
+      def photos_within_radius(radius_km)
         Fleakr::Objects::Photo.find_all_by_search(:lat => @latitude, :lon => @longitude, :radius => radius_km)
       end
       

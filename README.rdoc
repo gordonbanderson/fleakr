@@ -274,7 +274,7 @@ Or by its WOE (Where On Earth) id:
 
 Find places by tags
 
-    >> places = Fleakr::Objects::Place.find_all_by_tags('volcano,volcanic')
+    >> places = Fleakr::Objects::Place.find_all_by_tags(:tags => 'volcano,volcanic')
 
 Or find top places (most tagging activity in previous 24 hours by default)
 
