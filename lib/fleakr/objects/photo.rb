@@ -110,6 +110,13 @@ module Fleakr
         @title = title
         @description = description
       end
+
+      #Add the current photo to a set of given id
+      # [:photoset_id] The desired photoset id
+      def add_to_set(photoset_id)
+        options = {:photo_id => id, :photoset_id => photoset_id}
+        response = Fleakr::Api::WriteMethodRequest.with_response!('flickr.photosets.addPhoto', options)
+      end
       
       
       # Set the location of a photograph
