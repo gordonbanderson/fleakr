@@ -1,3 +1,7 @@
 /pkg/
 /coverage/
 /doc/
+/.bundle
+/.rvmrc
+/Gemfile.lock
+/_site

@@ -1,10 +1,10 @@
 module Fleakr
   module Objects # :nodoc:
-    
+
     # = User
     #
     # == Accessors
-    # 
+    #
     # This class maps directly onto the flickr.people.* API methods and provides the following attributes
     # for a user:
     #
@@ -23,7 +23,7 @@ module Fleakr
     #
     # The User class is pretty central to many of the other data available across the system, so there are a
     # few associations available to a user:
-    # 
+    #
     # [sets] A list of this user's public sets (newest first). See Fleakr::Objects::Set for more information.
     # [groups] A list of this user's public groups. See Fleakr::Objects::Group.
     # [photos] A list of this user's public photos (newest first).  See Fleakr::Objects::Photo.
@@ -56,7 +56,10 @@ module Fleakr
       flickr_attribute :pro, :from => 'person@ispro'
       flickr_attribute :admin, :from => 'person@isadmin'
 
-      has_many :sets, :groups, :photos, :contacts, :tags, :collections
+      has_many :sets, :groups, :contacts, :tags, :collections
+
+      association :private_photos, :type => :photo
+      association :public_photos, :type => :photo
 
       find_one :by_username, :call => 'people.findByUsername'
       find_one :by_email, :using => :find_email, :call => 'people.findByEmail'
@@ -67,37 +70,50 @@ module Fleakr
       lazily_load :icon_server, :icon_farm, :pro, :admin, :with => :load_info
 
       scoped_search
-      
+
       def self.user_id?(username_or_user_id)
         (username_or_user_id =~ /^\d+@N\d{2}$/) ? true : false
       end
-      
+
       def self.find_by_identifier(identifier)
         user_id?(identifier) ? find_by_id(identifier) : find_by_username(identifier)
       end
-      
+
+      def authenticated?
+        !authentication_options.empty?
+      end
+
+      def photos(options = {})
+        options     = authentication_options.merge(options)
+        method_name = authenticated? ? :private_photos : :public_photos
+
+        with_caching(options, method_name) { send(method_name, options) }
+      end
+
       # Is this a pro account?
       def pro?
-        (self.pro.to_i == 0) ? false : true
+        (pro.to_i == 0) ? false : true
       end
 
       # Is this user an admin?
       def admin?
-        (self.admin.to_i == 0) ? false : true
+        (admin.to_i == 0) ? false : true
       end
 
       # This user's buddy icon
       def icon_url
-        if self.icon_server.to_i > 0
-          "http://farm#{self.icon_farm}.static.flickr.com/#{self.icon_server}/buddyicons/#{self.id}.jpg"
+        if icon_server.to_i > 0
+          "http://farm#{icon_farm}.static.flickr.com/#{icon_server}/buddyicons/#{id}.jpg"
         else
           'http://www.flickr.com/images/buddyicon.jpg'
         end
       end
-      
+
       def load_info # :nodoc:
-        response = Fleakr::Api::MethodRequest.with_response!('people.getInfo', :user_id => self.id)
-        self.populate_from(response.body)
+        options  = authentication_options.merge(:user_id => id)
+        response = Fleakr::Api::MethodRequest.with_response!('people.getInfo', options)
+
+        populate_from(response.body)
       end
 
     end
