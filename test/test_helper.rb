@@ -94,6 +94,7 @@ class Test::Unit::TestCase
     end
   end
 
+  def self.should_find_all(thing, options)
 
     should "be able to find all #{thing} by #{options[:by]}" do
       condition_value = '1'
@@ -118,7 +119,6 @@ class Test::Unit::TestCase
     end
 
   end
-
   
   # The place class does not follow the above methodology of one param, so allow for testing with multiple
   # options[:params] - an array of the parameters
@@ -243,7 +243,6 @@ end
      
    end
   
-
   def read_fixture(method_call)
     fixture_path = File.dirname(__FILE__) + '/fixtures'
     File.read("#{fixture_path}/#{method_call}.xml")
