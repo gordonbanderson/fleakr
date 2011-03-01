@@ -85,11 +85,14 @@ class Test::Unit::TestCase
     options[:with] = options[:by] if options[:with].nil?
     params = {options[:with] => condition_value}
 
-    should "be able to find a #{thing} by #{options[:by]}" do
+    should "be able to find a #{thing} by #{options[:by]} of class #{options[:class]}" do
       stub = stub()
       response = mock_request_cycle :for => options[:call], :with => params
 
       options[:class].expects(:new).with(response.body, params).returns(stub)
+      
+      puts options[:class]
+      
       options[:class].send("find_by_#{options[:by]}".to_sym, condition_value).should == stub
     end
   end
@@ -123,8 +126,8 @@ class Test::Unit::TestCase
   # The place class does not follow the above methodology of one param, so allow for testing with multiple
   # options[:params] - an array of the parameters
   def self.should_find_one_with_multiple_parameters(thing, options)
-    class_name  = thing.to_s.singularize.camelcase
-    klass       = "Fleakr::Objects::#{class_name}".constantize
+    class_name = self.name.to_s.match(/([^:]+)Test$/)[1]
+    klass      = Fleakr::Objects.const_get(class_name)
     object_type = class_name.downcase    
 =begin
 stub = stub()
@@ -141,7 +144,7 @@ klass.send("find_by_#{options[:by]}".to_sym, condition_value).should == stub
       
       stub = stub()
       flickr_options = options[:flickr_params]
-      if !flickr_options.blank?
+      if !Utility.blank?(flickr_options)
         response = mock_request_cycle :for => options[:call], :with => flickr_options
       else
         response = mock_request_cycle :for => options[:call], :with => finder_options
@@ -149,7 +152,7 @@ klass.send("find_by_#{options[:by]}".to_sym, condition_value).should == stub
       klass.expects(:new).with(response.body/options[:path]).returns(stub)
       
       method_name = options[:method_name]
-      method_name = "by_#{options[:by]}" if method_name.blank?
+      method_name = "by_#{options[:by]}" if Utility.blank?(method_name)
       method_name = "find_one_#{method_name}" #Ensure find_all_ consistency
       klass.send("#{method_name}".to_sym, finder_options).should == stub
     end
@@ -158,8 +161,8 @@ klass.send("find_by_#{options[:by]}".to_sym, condition_value).should == stub
   # The place class does not follow the above methodology of one param, so allow for testing with multiple
   # options[:params] - an array of the parameters
   def self.should_find_all_with_multiple_parameters(thing, options)
-    class_name     = thing.to_s.singularize.camelcase
-    klass          = "Fleakr::Objects::#{class_name}".constantize
+    class_name = self.name.to_s.match(/([^:]+)Test$/)[1]
+    klass      = Fleakr::Objects.const_get(class_name)
     object_type    = class_name.downcase
     
     should "be able to find all #{thing} using #{options[:params].join(',')}" do
@@ -171,7 +174,7 @@ klass.send("find_by_#{options[:by]}".to_sym, condition_value).should == stub
       # In the case of finding a place by bounding box, the parameters passed in the method are
       # east, south, north and east, yet this is converted to a bbox string that is passed to flickr
       flickr_options = options[:flickr_params]
-      if !flickr_options.blank?
+      if !Fleakr::Support::Utility.blank?(flickr_options)
         response = mock_request_cycle :for => options[:call], :with => flickr_options
       else
         response = mock_request_cycle :for => options[:call], :with => finder_options
@@ -190,7 +193,7 @@ klass.send("find_by_#{options[:by]}".to_sym, condition_value).should == stub
       end
       
       method_name = options[:method_name]
-      method_name = "by_#{options[:by]}" if method_name.blank?
+      method_name = "by_#{options[:by]}" if Fleakr::Support::Utility.blank?(method_name)
       method_name = "find_all_#{method_name}" #Ensure find_all_ consistency
       klass.send(method_name.to_sym, finder_options).should == stubs
     end
@@ -214,8 +217,8 @@ end
   # Test where or not the relevant set method was called with correct API call to Flickr
   def self.should_be_able_to_set(thing, options)
     should "be able to set #{options[:method]} with params #{options[:using].join(',')}" do
-    class_name  = thing.to_s.singularize.camelcase
-    klass       = "Fleakr::Objects::#{class_name}".constantize
+    class_name = self.class.name.match(/([^:]+)Test$/)[1]    
+    klass = Fleakr::Objects.const_get(class_name)
     object_type = class_name.downcase
     model_instance = klass::new
     instance_id = '1'
