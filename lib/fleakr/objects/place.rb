@@ -1,3 +1,4 @@
+
 module Fleakr
   module Objects # :nodoc:
 
@@ -22,7 +23,10 @@ module Fleakr
     #
     class Place
       
+      
+      
       include Fleakr::Support::Object
+      
       
       #If a place comes from a text search then it will have less information than the getInfo method.  use this flag so
       #as to know when to lazily called getInfo
@@ -52,6 +56,7 @@ module Fleakr
       
       #Find by a search query
       find_all :by_query, :call => 'places.find', :path => 'places/place'
+      
       
       #Find places that are the children of a given place and have public photographs
       find_all :children_with_photos_public, :using => :woe_id, :call=> 'places.getChildrenWithPhotosPublic',:path => 'places/place'
@@ -93,7 +98,7 @@ module Fleakr
         place_type_id = 8
         place_type_id = options[:place_type_id] if options[:place_type_id] != nil
         woe_id = options[:woe_id]
-        if woe_id.blank?
+        if Fleakr::Support::Utility.blank?(woe_id)
           response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :tags => options[:tags], :place_type_id => place_type_id)
         else
           response = Fleakr::Api::MethodRequest.with_response!('places.placesForTags', :woe_id => woe_id, :tags => options[:tags], :place_type_id => place_type_id)
@@ -104,7 +109,7 @@ module Fleakr
       
       #This returns places for the currently authenticated user
       def self.find_all_by_authenticated_user(place_type_id = 8, woe_id = nil)
-        if woe_id.blank?
+        if Fleakr::Support::Utility.blank?(woe_id)
           options = {:place_type_id => place_type_id}
         else
           options = {:woe_id => woe_id, :place_type_id => place_type_id}
@@ -116,7 +121,7 @@ module Fleakr
       
       #This returns places for the contacts of the currently authenticated user
       def self.find_all_by_contacts_of_authenticated_user(place_type_id = 8, woe_id = nil)
-        if woe_id.blank?
+        if Fleakr::Support::Utility.blank?(woe_id)
           options = {:place_type_id => place_type_id}
         else
           options = {:woe_id => woe_id, :place_type_id => place_type_id }
@@ -133,7 +138,7 @@ module Fleakr
       def self.find_all_top_places(options={})
         woe_id = options[:woe_id]
         place_type_id = (options[:place_type_id]==nil) ? 8 : options[:place_type_id]
-        if woe_id.blank?
+        if Fleakr::Support::Utility.blank?(woe_id)
           response = Fleakr::Api::MethodRequest.with_response!('places.getTopPlacesList', :place_type_id => place_type_id)
         else
           response = Fleakr::Api::MethodRequest.with_response!('places.getTopPlacesList', :woe_id => woe_id, :place_type_id => place_type_id)
@@ -182,14 +187,14 @@ module Fleakr
       def initialize(document = nil, options = {})
         if document != nil
           self.populate_from(document) unless document.nil?
-          if @name.blank?
+          if Fleakr::Support::Utility.blank?(@name)
             @name = document.at('.').inner_text
           else
             @brief = false
           end
         
         end
-        @authentication_options = options.extract!(:auth_token)
+         @authentication_options = extract_authentication_from(options)
       end
     end
     
