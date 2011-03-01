@@ -91,7 +91,6 @@ class Test::Unit::TestCase
 
       options[:class].expects(:new).with(response.body, params).returns(stub)
       
-      puts options[:class]
       
       options[:class].send("find_by_#{options[:by]}".to_sym, condition_value).should == stub
     end
@@ -99,7 +98,10 @@ class Test::Unit::TestCase
 
   def self.should_find_all(thing, options)
 
-    should "be able to find all #{thing} by #{options[:by]}" do
+    find_by = options[:by]
+    find_by = options[:using] if find_by == nil
+    
+    should "be able to find all #{thing} by #{find_by}" do
       condition_value = '1'
       finder_options = {(options[:using] || options[:by]) => condition_value}
 
@@ -116,7 +118,7 @@ class Test::Unit::TestCase
       end
 
 
-      method = options[:method] || "find_all_by_#{options[:by]}"
+      method = options[:method] || "find_all_by_#{find_by}"
 
       options[:class].send(method.to_sym, condition_value).should == stubs
     end
