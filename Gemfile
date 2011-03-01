@@ -9,4 +9,5 @@ group :development do
   gem "mocha", "0.9.8"
   gem "blankslate", "~> 2.1.2.0"
   gem "hanna", "~> 0.1.0"
+  gem "rcov"
 end
